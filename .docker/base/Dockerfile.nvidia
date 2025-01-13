@@ -1,5 +1,5 @@
 ARG UBUNTU_RELEASE=20.04
-ARG CUDA_VERSION=11.4.3
+ARG CUDA_VERSION=12.4.1
 ARG VIRTUALGL_VERSION=3.1
 ARG GSTREAMER_VERSION=1.20
 
@@ -126,6 +126,27 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG USERNAME=neko
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG NVIDIA_DRIVER_VERSION=550
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        xserver-xorg \
+        xserver-xorg-core \
+        xorg \
+        xserver-xorg-video-nvidia-${NVIDIA_DRIVER_VERSION} \
+        xserver-xorg-input-all \
+        x11-xserver-utils \
+        xinit \
+        xserver-xorg-video-all \
+        xfonts-cyrillic \
+        xfonts-100dpi \
+        xfonts-75dpi \
+        xfonts-base; \ 
+
+    # clean up
+    apt-get clean -y; \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 RUN set -eux; \
     dpkg --add-architecture i386; \
@@ -159,8 +180,8 @@ RUN set -eux; \
     #
     # create symlink for libnvrtc.so (needed for cudaconvert)
     find /usr/local/cuda/lib64/ -maxdepth 1 -type l -name "*libnvrtc.so.*" -exec sh -c 'ln -sf {} /usr/local/cuda/lib64/libnvrtc.so' \;; \
-    #
-    # clean up
+    
+    #clean up
     apt-get clean -y; \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
