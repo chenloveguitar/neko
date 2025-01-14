@@ -126,23 +126,27 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG USERNAME=neko
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ARG NVIDIA_DRIVER_VERSION=550
+ARG NVIDIA_DRIVER_VERSION=545
 
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-        #xserver-xorg \
-        #xserver-xorg-core \
+        # xserver-xorg \
+        # xserver-xorg-core \
         xorg \
-        #xserver-xorg-video-nvidia-${NVIDIA_DRIVER_VERSION} \
-        xserver-xorg-input-all \
+        xserver-xorg-video-nvidia-${NVIDIA_DRIVER_VERSION} \
+        # xserver-xorg-input-all \
         x11-xserver-utils \
         xinit \
-        #xserver-xorg-video-all \
+        # xserver-xorg-video-all \
         xfonts-cyrillic \
         xfonts-100dpi \
         xfonts-75dpi \
-        xfonts-base; \ 
+        xfonts-base \
+        pciutils \
+        kmod \
+        mesa-utils; \
+
 
     # clean up
     apt-get clean -y; \
