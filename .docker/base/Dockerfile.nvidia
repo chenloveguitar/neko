@@ -126,7 +126,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG USERNAME=neko
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ARG NVIDIA_DRIVER_VERSION=545
+# ARG NVIDIA_DRIVER_VERSION=545
 
 RUN set -eux; \
     apt-get update; \
@@ -134,7 +134,7 @@ RUN set -eux; \
         # xserver-xorg \
         # xserver-xorg-core \
         xorg \
-        xserver-xorg-video-nvidia-${NVIDIA_DRIVER_VERSION} \
+        # xserver-xorg-video-nvidia-${NVIDIA_DRIVER_VERSION} \
         # xserver-xorg-input-all \
         x11-xserver-utils \
         xinit \
