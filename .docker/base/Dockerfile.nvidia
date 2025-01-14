@@ -138,7 +138,7 @@ RUN set -eux; \
         # xserver-xorg-input-all \
         x11-xserver-utils \
         xinit \
-        # xserver-xorg-video-all \
+        xserver-xorg-video-all \
         xfonts-cyrillic \
         xfonts-100dpi \
         xfonts-75dpi \
