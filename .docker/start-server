@@ -30,7 +30,8 @@ if [[ "${SERVER_TAG}" == "intel-"* ]]; then
 fi
 
 # use --gpus all to enable GPU acceleration
-docker run --rm -it \
+docker run -d \
+  --privileged \
   --name "neko_dev" \
   $GPU_FLAG \
   -p "${SERVER_PORT}:8080" \
@@ -39,8 +40,16 @@ docker run --rm -it \
   -e "NEKO_EPR=${SERVER_EPR}" \
   -e "NEKO_NAT1TO1=${SERVER_IP}" \
   -e "NEKO_ICELITE=true" \
-  -e "NEKO_MAX_FPS=25" \
+  -e "NEKO_MAX_FPS=100" \
+  -e NVIDIA_VISIBLE_DEVICES=all \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
   -v "${BINARY_PATH}:/usr/bin/neko" \
-  --shm-size=2G \
+  -v /home/git/neko/.docker/base/xorg.conf:/etc/neko/xorg.conf \
+  -v /home/git/neko/.docker/base/supervisord.conf:/etc/neko/supervisord.conf \
+  -v /home/git/neko/.docker/google-chrome/supervisord.nvidia.conf:/etc/neko/supervisord/google-chrome.conf \
+  --mount type=bind,source=/usr/lib64/xorg,target=/usr/lib64/xorg \
+  --shm-size=8G \
   --cap-add SYS_ADMIN \
+  --add-host admin.xc.com:192.168.0.14 \
+  --add-host 3d.xc.com:192.168.0.14 \
   ${BUILD_IMAGE}:${SERVER_TAG}
